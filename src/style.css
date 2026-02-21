@@ -1,0 +1,166 @@
+:root {
+  --accent: #2a6f45;          /* main green accent */
+  --accent-hover: #1f5935;    /* darker on hover */
+  --muted: #f6f2ef;
+  --glass: rgba(255, 255, 255, 0.15);
+}
+
+html, body, #root, .app-root {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #0f1724;
+  color: #fff;
+}
+
+/* Background blur */
+.app-root::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('/assets/bg-landing.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px) brightness(0.7);
+  transform: scale(1.02);
+  z-index: 0;
+}
+
+.app-root::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,10,10,0.25), rgba(10,10,10,0.45));
+  z-index: 1;
+}
+
+/* Container to center content */
+.container-card {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Glass card */
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(12px) saturate(120%);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 50px rgba(2,6,23,0.7);
+}
+
+/* Form title */
+.form-title {
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+/* Form inputs */
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background: rgba(255,255,255,0.85);
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(42,111,69,0.35);
+}
+
+/* Buttons */
+.btn-accent {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-accent:hover {
+  background: white;
+  color: black;
+}
+
+/* Create Account button */
+.btn-outline-secondary {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 2px solid white; /* white border initially */
+  background: transparent;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+/* ✨ This is the hover effect you want */
+.btn-outline-secondary:hover {
+  background: white;
+  color: black;
+  border: none; /* remove the border on hover */
+}
+
+/* Links */
+.link-muted {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.link-muted:hover {
+  color: #c0ffc8;
+}
+
+/* Invalid feedback (Bootstrap style) */
+.invalid-feedback {
+  display: block;
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 3px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .glass-card {
+    padding: 1.5rem;
+  }
+  .form-title {
+    font-size: 1.5rem;
+  }
+  .btn-accent, .btn-outline-secondary {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
