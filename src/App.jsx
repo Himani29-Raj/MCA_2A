@@ -1,40 +1,43 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
+import Dashboard from './components/Dashboard.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
-// 🌟 Newly added imports for dashboards
-import AdminDashboard from './components/adminDashboard.jsx';
-import SupplierDashboard from './components/supplierDashboard.jsx';
-import LiveryDashboard from './components/liveryDashboard.jsx';
-import UserDashboard from './components/userDashboard.jsx';
-
-import './style.css'; // Make sure your CSS is imported
+import './style.css';
 
 export default function App() {
   const location = useLocation();
 
   return (
     <div className="app-root">
-      {/* Global blur background */}
       <div className="bg-image"></div>
 
-      {/* AnimatePresence wraps Routes for page transitions */}
       <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
+
+          {/* 🌐 Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+         
+          <Route
+            path="/dashboard"
+            element={
+              localStorage.getItem("token") ? <Dashboard /> : <Navigate to="/login" />
+            }
+          />
 
-          {/* 🌈 Dashboards */}
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/supplier-dashboard" element={<SupplierDashboard />} />
-          <Route path="/livery-dashboard" element={<LiveryDashboard />} />
-          <Route path="/user-dashboard" element={<UserDashboard />} />
+          {/* 🔒 Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/user-dashboard" element={<Dashboard />} />
+          </Route>
 
-          {/* Default fallback */}
+          {/* Fallback */}
           <Route path="*" element={<Home />} />
         </Routes>
       </AnimatePresence>

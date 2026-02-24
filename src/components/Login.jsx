@@ -1,119 +1,134 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Mail, Lock } from "lucide-react";
+import "./Login.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("admin"); // default role
+  const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const validate = () => {
     const e = {};
-    if (!email) e.email = "Email required";
-    else if (!/\S+@\S+\.\S+/.test(email)) e.email = "Enter a valid email";
-
-    if (!password) e.password = "Password required";
-    else if (password.length < 6) e.password = "Password must be at least 6 characters";
+    if (!form.email) e.email = "Email required";
+    if (!form.password) e.password = "Password required";
     return e;
   };
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
     const e = validate();
     setErrors(e);
-    if (Object.keys(e).length === 0) {
-      // Redirect based on selected role
-      switch (role) {
-        case "admin":
-          navigate("/admin-dashboard");
-          break;
-        case "supplier":
-          navigate("/supplier-dashboard");
-          break;
-        case "delivery":
-          navigate("/livery-dashboard");
-          break;
-        case "customer":
-          navigate("/user-dashboard");
-          break;
-        default:
-          navigate("/");
+    setServerError("");
+
+    if (Object.keys(e).length !== 0) return;
+
+    try {
+      setLoading(true);
+
+      const res = await fetch("http://localhost:8081/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      let data;
+      const contentType = res.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        if (!res.ok) {
+          setServerError(text || "Login failed");
+          return;
+        }
+        data = { token: text }; // if backend returns token as plain text
       }
+
+      if (!res.ok) {
+        setServerError(data?.message || "Login failed");
+        return;
+      }
+
+      localStorage.setItem("token", data.token);
+      alert("Login successful!");
+      navigate("/user-dashboard");
+
+    } catch (err) {
+      console.error(err);
+      setServerError("Server not reachable");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <motion.div
-      className="container-card"
-      initial={{ x: 50, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -50, opacity: 0 }}
+      className="home-wrapper"
+      initial={{ y: 30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -30, opacity: 0 }}
     >
-      <div className="glass-card">
-        <h2 className="form-title">Login as {role.charAt(0).toUpperCase() + role.slice(1)}</h2>
-        <p style={{ marginTop: 0, color: "#fff", fontSize: "1rem" }}>
-          Select your role and login to your account
+      <div className="glass-card auth-card">
+        <h2 className="auth-title">Welcome Back 👋</h2>
+        <p className="auth-subtitle">
+          Login to continue ordering delicious food
         </p>
 
-        {/* Role Selection */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1rem" }}>
-          {["admin", "supplier", "customer", "delivery"].map((r) => (
-            <label key={r} style={{ color: "#fff", cursor: "pointer" }}>
-              <input
-                type="radio"
-                value={r}
-                checked={role === r}
-                onChange={(e) => setRole(e.target.value)}
-                style={{ marginRight: 5 }}
-              />
-              {r.charAt(0).toUpperCase() + r.slice(1)}
-            </label>
-          ))}
-        </div>
+        {serverError && <div className="server-error">{serverError}</div>}
 
-        {/* Login Form */}
-        <form onSubmit={onSubmit} noValidate>
-          <div className="mb-3">
+        <form onSubmit={onSubmit} noValidate className="auth-form">
+          <div className="input-group">
+            <Mail size={18} />
             <input
               type="email"
-              className={`form-control ${errors.email ? "is-invalid" : ""}`}
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
-            <div className="invalid-feedback">{errors.email}</div>
           </div>
+          <div className="error-text">{errors.email}</div>
 
-          <div className="mb-3">
+          <div className="input-group">
+            <Lock size={18} />
             <input
               type="password"
-              className={`form-control ${errors.password ? "is-invalid" : ""}`}
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
-            <div className="invalid-feedback">{errors.password}</div>
           </div>
+          <div className="error-text">{errors.password}</div>
 
-          <button type="submit" className="btn-accent">
-            Login
+          <button
+            type="submit"
+            className="btn btn-accent big-btn"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <div style={{ marginTop: 15, fontSize: 14 }}>
+        <div className="auth-footer">
           <small>
-            Don't have an account?{" "}
+            New here?{" "}
             <Link to="/register" className="link-muted">
-              Create one
+              Create an account
             </Link>
           </small>
         </div>
 
-        <div style={{ marginTop: 8, fontSize: 13 }}>
+        <div className="auth-footer">
           <Link to="/" className="link-muted">
-            Back to Home
+            ← Back to Home
           </Link>
         </div>
       </div>
