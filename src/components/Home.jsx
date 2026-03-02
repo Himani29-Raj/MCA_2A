@@ -17,7 +17,7 @@ const Home = () => {
     >
       {/* Navbar */}
       <nav className="home-nav glass-card">
-        <h2 className="logo">🍔 Cloud Kitchen</h2>
+        <h2 className="logo">🍔 Homemade Food Platform</h2>
         <div className="nav-actions">
           <Link to="/login" className="btn btn-outline fancy-btn">Login</Link>
           <Link to="/register" className="btn btn-accent fancy-btn glow">Sign Up</Link>
@@ -42,11 +42,11 @@ const Home = () => {
     <h4>Need help? 🍔</h4>
 
     <div className="contact-row">
-      📧 support@cloudkitchen.com
+      📧 support@homemadefood.com
     </div>
 
     <div className="contact-row">
-      📞 +91 98765 43210
+      📞 +91 9026305790
     </div>
 
     <button className="contact-close" onClick={() => setShowContact(false)}>

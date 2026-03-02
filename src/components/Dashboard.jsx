@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Search, Home, Heart, ShoppingBag, Settings, User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
+import "./Profile.css";
+import "./Setting.css";
+import "./Cart.css";
+
 
 const menuItems = [
   {

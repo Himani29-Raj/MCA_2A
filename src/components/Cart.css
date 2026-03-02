@@ -1,0 +1,243 @@
+/* ============================= */
+/* MAIN LAYOUT */
+/* ============================= */
+
+.cart-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ============================= */
+/* CREATIVE FOOD BACKGROUND */
+/* ============================= */
+
+.cart-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1504674900247-0877df9cc836");
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  transform: scale(1.1);
+  z-index: -2;
+}
+
+.cart-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(249, 115, 22, 0.65),
+    rgba(255, 228, 230, 0.85)
+  );
+}
+
+/* ============================= */
+/* MAIN SECTION */
+/* ============================= */
+
+.cart-main {
+  padding: 40px;
+}
+
+.cart-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+/* ============================= */
+/* GRID STRUCTURE */
+/* ============================= */
+
+.cart-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+/* ============================= */
+/* CART ITEMS */
+/* ============================= */
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cart-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+}
+
+.cart-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Food Image */
+.cart-card img {
+  width: 110px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* Item Info */
+.cart-info {
+  flex: 1;
+}
+
+.cart-info h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.price {
+  color: #f97316;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* Quantity Control */
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-control button {
+  border: none;
+  background: #f97316;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.qty-control button:hover {
+  background: #ea580c;
+}
+
+.qty-control span {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Right Actions */
+.cart-actions {
+  text-align: right;
+}
+
+.item-total {
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+/* Remove Button */
+.remove-btn {
+  border: none;
+  background: #ffe4e6;
+  color: #dc2626;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+/* ============================= */
+/* ORDER SUMMARY */
+/* ============================= */
+
+.cart-summary {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  padding: 25px;
+  border-radius: 22px;
+  height: fit-content;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.cart-summary h3 {
+  margin-bottom: 18px;
+  font-size: 20px;
+}
+
+/* Summary Rows */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #444;
+}
+
+.summary-row.total {
+  font-weight: 700;
+  font-size: 18px;
+  color: #000;
+}
+
+/* Checkout Button */
+.checkout-btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkout-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 18px rgba(249,115,22,0.5);
+}
+
+/* Empty Cart */
+.empty {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  padding: 40px;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 900px) {
+  .cart-container {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+}

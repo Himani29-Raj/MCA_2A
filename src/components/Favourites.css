@@ -1,0 +1,159 @@
+/* ============================= */
+/* MAIN LAYOUT */
+/* ============================= */
+
+.fav-layout {
+  min-height: 100vh;
+  position: relative;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+/* ============================= */
+/* CREATIVE BACKGROUND */
+/* ============================= */
+
+.fav-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1499028344343-cd173ffc68a9");
+  background-size: cover;
+  background-position: center;
+  filter: blur(12px);
+  transform: scale(1.1);
+  z-index: -2;
+}
+
+.fav-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(249,115,22,0.65),
+    rgba(255,228,230,0.85)
+  );
+}
+
+/* ============================= */
+/* MAIN CONTENT */
+/* ============================= */
+
+.fav-main {
+  padding: 40px;
+}
+
+.fav-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* ============================= */
+/* GRID */
+/* ============================= */
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+/* ============================= */
+/* CARD */
+/* ============================= */
+
+.fav-card {
+  background: rgba(255,255,255,0.8);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  transition: 0.3s;
+}
+
+.fav-card:hover {
+  transform: translateY(-8px);
+}
+
+/* Image */
+.fav-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+/* Info */
+.fav-info {
+  padding: 18px;
+}
+
+.fav-info h3 {
+  margin-bottom: 8px;
+}
+
+.price {
+  color: #f97316;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* Buttons */
+.fav-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Add Cart */
+.cart-btn {
+  flex: 1;
+  border: none;
+  background: linear-gradient(135deg,#f97316,#fb923c);
+  color: white;
+  padding: 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.cart-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Remove */
+.remove-btn {
+  flex: 1;
+  border: none;
+  background: #ffe4e6;
+  color: #dc2626;
+  padding: 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+/* Empty State */
+.empty {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 60px;
+  color: #555;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .fav-main {
+    padding: 20px;
+  }
+}
