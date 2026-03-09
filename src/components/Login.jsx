@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
-import "./Login.css";
+import "./Register.css"; // 👈 use same css as register
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const validate = () => {
@@ -19,56 +18,55 @@ const Login = () => {
     return e;
   };
 
-  const onSubmit = async (ev) => {
-    ev.preventDefault();
-    const e = validate();
-    setErrors(e);
-    setServerError("");
+ const onSubmit = async (ev) => {
+  ev.preventDefault();
+  const e = validate();
+  setErrors(e);
+  setServerError("");
 
-    if (Object.keys(e).length !== 0) return;
+  if (Object.keys(e).length !== 0) return;
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const res = await fetch("http://localhost:8081/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      });
+    const res = await fetch("http://localhost:8081/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
 
-      let data;
-      const contentType = res.headers.get("content-type");
+    const data = await res.json();   // ✅ read JSON
 
-      if (contentType && contentType.includes("application/json")) {
-        data = await res.json();
-      } else {
-        const text = await res.text();
-        if (!res.ok) {
-          setServerError(text || "Login failed");
-          return;
-        }
-        data = { token: text }; // if backend returns token as plain text
-      }
+    if (!res.ok) {
+      setServerError(data.message || "Login failed");
+      return;
+    }
 
-      if (!res.ok) {
-        setServerError(data?.message || "Login failed");
-        return;
-      }
-
+    // ✅ Save token and role
       localStorage.setItem("token", data.token);
-      alert("Login successful!");
-      navigate("/user-dashboard");
+localStorage.setItem("user", JSON.stringify({
+  name: data.name,
+  role: data.role
+}));
+
+      // ✅ Redirect based on role
+      if (data.role === "SUPPLIER") {
+        navigate("/supplier");
+      } else {
+        navigate("/user-dashboard");
+      }
 
     } catch (err) {
       console.error(err);
-      setServerError("Server not reachable");
+      setServerError(err.message || "Server not reachable");
     } finally {
       setLoading(false);
     }
   };
+
+ 
 
   return (
     <motion.div
@@ -80,12 +78,13 @@ const Login = () => {
       <div className="glass-card auth-card">
         <h2 className="auth-title">Welcome Back 👋</h2>
         <p className="auth-subtitle">
-          Login to continue ordering delicious food
+          Login to continue ordering fresh meals
         </p>
 
         {serverError && <div className="server-error">{serverError}</div>}
 
-        <form onSubmit={onSubmit} noValidate className="auth-form">
+        <form onSubmit={onSubmit} className="auth-form">
+
           <div className="input-group">
             <Mail size={18} />
             <input
@@ -119,9 +118,9 @@ const Login = () => {
 
         <div className="auth-footer">
           <small>
-            New here?{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="link-muted">
-              Create an account
+              Create Account
             </Link>
           </small>
         </div>

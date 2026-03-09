@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState, useEffect } from "react";
 import { Search, Home, Heart, ShoppingBag, Settings, User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
@@ -52,12 +52,28 @@ export default function Dashboard() {
   const [activeCategory, setActiveCategory] = useState("Recommended");
   const [activeTab, setActiveTab] = useState("Menu");
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
   };
+
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  fetch("http://localhost:8081/api/auth/user/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setUser(data);
+    })
+    .catch((err) => console.log(err));
+}, []);
 
   const filteredItems =
     activeCategory === "Recommended"
@@ -86,7 +102,7 @@ export default function Dashboard() {
         {/* Header */}
         <header className="dashboard-top">
           <div>
-            <h1>Welcome, User 👋</h1>
+            <h1>Welcome, {user ? user.name : "User"} 👋</h1>
             <p>Good food = good mood 😄</p>
           </div>
 

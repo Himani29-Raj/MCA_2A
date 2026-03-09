@@ -1,0 +1,104 @@
+.addfood-layout{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(to right,#f7f7f7,#ffe4e6);
+font-family:Segoe UI;
+}
+
+.addfood-card{
+width:420px;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.addfood-card h2{
+text-align:center;
+margin-bottom:20px;
+color:#f97316;
+}
+
+.addfood-card form{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.addfood-card label{
+font-size:14px;
+font-weight:600;
+color:#555;
+}
+
+.addfood-card input,
+.addfood-card select{
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+outline:none;
+}
+
+.addfood-card input:focus,
+.addfood-card select:focus{
+border-color:#f97316;
+}
+
+.add-btn{
+margin-top:10px;
+background:#f97316;
+color:white;
+border:none;
+padding:10px;
+border-radius:999px;
+cursor:pointer;
+font-weight:600;
+}
+
+.add-btn:hover{
+background:#ea580c;
+}
+
+.cancel-btn{
+margin-top:6px;
+background:#eee;
+border:none;
+padding:10px;
+border-radius:999px;
+cursor:pointer;
+}
+.upload-box{
+position:relative;
+width:100%;
+height:150px;
+border:2px dashed #ccc;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+overflow:hidden;
+background:#fafafa;
+}
+
+.upload-box p{
+color:#777;
+font-size:14px;
+}
+
+.upload-box img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.upload-box input{
+position:absolute;
+width:100%;
+height:100%;
+opacity:0;
+cursor:pointer;
+}
+

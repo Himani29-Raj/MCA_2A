@@ -17,7 +17,7 @@ const Home = () => {
     >
       {/* Navbar */}
       <nav className="home-nav glass-card">
-        <h2 className="logo">🍔 Cloud Kitchen</h2>
+        <h2 className="logo">🍔 HomeBites</h2>
         <div className="nav-actions">
           <Link to="/login" className="btn btn-outline fancy-btn">Login</Link>
           <Link to="/register" className="btn btn-accent fancy-btn glow">Sign Up</Link>
@@ -66,7 +66,7 @@ const Home = () => {
         </motion.h1>
 
         <p>
-          Order fresh, hygienic, homemade-style meals from our Cloud Kitchen.  
+          Order fresh, hygienic, homemade-style meals from our HomeBites.  
           Hot food at your door in minutes.
         </p>
 

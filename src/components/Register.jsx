@@ -5,12 +5,12 @@ import { User, Mail, Lock, Store, User2 } from "lucide-react";
 import "./Register.css";
 
 const Register = () => {
-  const [form, setForm] = useState({ 
-    name: "", 
-    email: "", 
-    password: "", 
-    confirm: "", 
-    role: "CUSTOMER" 
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+    role: "CUSTOMER",
   });
 
   const [errors, setErrors] = useState({});
@@ -21,13 +21,17 @@ const Register = () => {
   const validate = () => {
     const e = {};
     if (!form.name) e.name = "Full name required";
-    if (!form.email) e.email = !form.email
-      ? "Email required"
-      : !/\S+@\S+\.\S+/.test(form.email) && "Enter a valid email";
+    if (!form.email) e.email = "Email required";
+    else if (!/\S+@\S+\.\S+/.test(form.email))
+      e.email = "Enter a valid email";
+
     if (!form.password) e.password = "Password required";
-    else if (form.password.length < 6) e.password = "Password must be at least 6 characters";
-    if (form.password !== form.confirm) e.confirm = "Passwords do not match";
-    if (!form.role) e.role = "Please select a role";
+    else if (form.password.length < 6)
+      e.password = "Password must be at least 6 characters";
+
+    if (form.password !== form.confirm)
+      e.confirm = "Passwords do not match";
+
     return e;
   };
 
@@ -49,8 +53,7 @@ const Register = () => {
           name: form.name,
           email: form.email,
           password: form.password,
-          confirmPassword: form.confirm,
-          role: form.role, // 👈 added (backend can ignore if not needed)
+          role: form.role,
         }),
       });
 
@@ -61,8 +64,9 @@ const Register = () => {
         return;
       }
 
-      alert("Registration successful!");
-      navigate("/login");
+      // ✅ Correct navigation
+      navigate("/otp-verify", { state: { email: form.email } });
+
     } catch (err) {
       console.error(err);
       setServerError("Server not reachable");
@@ -81,7 +85,7 @@ const Register = () => {
       <div className="glass-card auth-card">
         <h2 className="auth-title">Create Your Food Account 🍽️</h2>
         <p className="auth-subtitle">
-          Join our Cloud Kitchen and start ordering fresh meals
+          Join our HomeBites and start ordering fresh meals
         </p>
 
         {serverError && <div className="server-error">{serverError}</div>}
