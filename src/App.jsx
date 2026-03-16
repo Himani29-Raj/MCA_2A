@@ -28,7 +28,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/otp-verify" element={<Otp />} />
          
-          <Route path="/add-food" element={<AddFood />} />
+          
 
           {/* Dashboard (token logic for now) */}
           <Route
@@ -36,6 +36,15 @@ export default function App() {
   element={
     <RoleProtectedRoute allowedRole="SUPPLIER">
       <Supplier />
+    </RoleProtectedRoute>
+  }
+/>
+
+<Route
+  path="/add-food"
+  element={
+    <RoleProtectedRoute allowedRole="SUPPLIER">
+      <AddFood />
     </RoleProtectedRoute>
   }
 />
