@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AddFood.css";
 
 const AddFood = () => {
@@ -8,10 +9,8 @@ const AddFood = () => {
 
     const [food, setFood] = useState({
         name: "",
-        category: "Burgers",
         price: "",
         discount: "",
-        stock: true,
         img: ""
     });
 
@@ -21,7 +20,6 @@ const AddFood = () => {
         setFood({ ...food, [e.target.name]: e.target.value });
     };
 
-    // ✅ Handle image upload from computer
     const handleImageUpload = (e) => {
 
         const file = e.target.files[0];
@@ -31,29 +29,47 @@ const AddFood = () => {
         const reader = new FileReader();
 
         reader.onloadend = () => {
-            setFood({ ...food, img: reader.result }); // store base64
-            setPreview(reader.result); // preview
+            setFood({ ...food, img: reader.result });
+            setPreview(reader.result);
         };
 
         reader.readAsDataURL(file);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const newItem = {
-            id: Date.now(),
-            name: food.name,
-            category: food.category,
-            price: Number(food.price),
-            discount: Number(food.discount),
-            stock: true,
-            featured: false,
-            img: food.img || "https://images.unsplash.com/photo-1550547660-d9450f859349"
-        };
+    try {
 
-        navigate("/supplier", { state: { newItem } });
-    };
+        const fileInput = document.querySelector('input[type="file"]');
+        const file = fileInput.files[0];
+
+        const formData = new FormData();
+        formData.append("name", food.name);
+        formData.append("price", food.price);
+        formData.append("discount", food.discount);
+        formData.append("image", file);
+
+        const response = await fetch("http://localhost:8081/api/food/add", {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed");
+        }
+
+        alert("Food added successfully");
+        navigate("/supplier");
+
+    } catch (error) {
+        console.error(error);
+        alert("Failed to add food");
+    }
+};
 
     return (
 
@@ -73,17 +89,6 @@ const AddFood = () => {
                         placeholder="Enter food name"
                     />
 
-                    <label>Category</label>
-                    <select
-                        name="category"
-                        value={food.category}
-                        onChange={handleChange}
-                    >
-                        <option>Burgers</option>
-                        <option>Pizza</option>
-                        <option>Pasta</option>
-                    </select>
-
                     <label>Price</label>
                     <input
                         name="price"
@@ -102,28 +107,23 @@ const AddFood = () => {
                         placeholder="Enter discount"
                     />
 
-                    
+                    <label>Upload Image</label>
 
-                    {/* Upload from computer */}
-                   <label>Upload Image</label>
+                    <div className="upload-box">
 
-<div className="upload-box">
+                        {preview ? (
+                            <img src={preview} alt="preview" />
+                        ) : (
+                            <p>Click to upload food image</p>
+                        )}
 
-    {preview ? (
-        <img src={preview} alt="preview" />
-    ) : (
-        <p>Click to upload food image</p>
-    )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                        />
 
-    <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-    />
-
-</div>
-
-                    
+                    </div>
 
                     <button type="submit" className="add-btn">
                         Add Item
@@ -144,7 +144,6 @@ const AddFood = () => {
         </div>
 
     );
-
 };
 
 export default AddFood;

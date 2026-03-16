@@ -42,7 +42,7 @@ const Home = () => {
     <h4>Need help? 🍔</h4>
 
     <div className="contact-row">
-      📧 support@cloudkitchen.com
+      📧 support@HomeBites.com
     </div>
 
     <div className="contact-row">

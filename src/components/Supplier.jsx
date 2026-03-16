@@ -8,92 +8,26 @@ const Supplier = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [supplierName, setSupplierName] = useState("");
-
+    const [menuItems, setMenuItems] = useState([]);
     const [searchTerm, setSearchTerm] = useState("All");
 
-    const [menuItems, setMenuItems] = useState([
-        {
-            id: 1,
-            name: "Veg Burger",
-            category: "Burgers",
-            price: 129,
-            discount: 20,
-            stock: true,
-            featured: false,
-            img: "https://images.unsplash.com/photo-1550547660-d9450f859349"
-        },
-        {
-            id: 2,
-            name: "Cheese Burger",
-            category: "Burgers",
-            price: 159,
-            discount: 15,
-            stock: true,
-            featured: true,
-            img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd"
-        },
-        {
-            id: 3,
-            name: "Margherita Pizza",
-            category: "Pizza",
-            price: 249,
-            discount: 10,
-            stock: true,
-            featured: false,
-            img: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca"
-        },
-        {
-            id: 4,
-            name: "Farmhouse Pizza",
-            category: "Pizza",
-            price: 299,
-            discount: 18,
-            stock: true,
-            featured: true,
-            img: "https://images.unsplash.com/photo-1594007654729-407eedc4fe1c"
-        },
-        {
-            id: 5,
-            name: "White Sauce Pasta",
-            category: "Pasta",
-            price: 179,
-            discount: 0,
-            stock: false,
-            featured: true,
-            img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9"
-        },
-        {
-            id: 6,
-            name: "Red Sauce Pasta",
-            category: "Pasta",
-            price: 189,
-            discount: 12,
-            stock: true,
-            featured: false,
-            img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9"
-        },
-        {
-            id: 7,
-            name: "French Fries",
-            category: "Burgers",
-            price: 99,
-            discount: 5,
-            stock: true,
-            featured: false,
-            img: "https://images.unsplash.com/photo-1576107232684-1279f390859f"
-        },
-        {
-            id: 8,
-            name: "Cold Coffee",
-            category: "Burgers",
-            price: 120,
-            discount: 8,
-            stock: true,
-            featured: false,
-            img: "https://images.unsplash.com/photo-1498804103079-a6351b050096"
-        }
-    ]);
+    useEffect(() => {
 
+    const fetchFoods = async () => {
+
+        const res = await fetch("http://localhost:8081/api/food/my-foods", {
+            headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+            }
+        });
+
+        const data = await res.json();
+        setMenuItems(data);
+    };
+
+    fetchFoods();
+
+}, []);
     useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -113,20 +47,44 @@ const Supplier = () => {
         return searchTerm === "All" || item.category === searchTerm;
     });
 
-    const toggleFeatured = (id) => {
-        setMenuItems(menuItems.map(item =>
-            item.id === id ? { ...item, featured: !item.featured } : item
-        ));
-    };
+    const toggleFeatured = async (id) => {
 
-    const toggleStock = (id) => {
-        setMenuItems(menuItems.map(item =>
-            item.id === id ? { ...item, stock: !item.stock } : item
-        ));
-    };
-    const deleteItem = (id) => {
-        setMenuItems(menuItems.filter(item => item.id !== id));
-    };
+    await fetch(`http://localhost:8081/api/food/feature/${id}`, {
+        method: "PUT",
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        }
+    });
+
+    setMenuItems(menuItems.map(item =>
+        item.id === id ? { ...item, featured: !item.featured } : item
+    ));
+};
+
+    const toggleStock = async (id) => {
+
+    await fetch(`http://localhost:8081/api/food/stock/${id}`, {
+        method: "PUT",
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        }
+    });
+
+   setMenuItems(menuItems.map(item =>
+    item.id === id ? { ...item, inStock: !item.inStock } : item
+));
+};
+    const deleteItem = async (id) => {
+
+    await fetch(`http://localhost:8081/api/food/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+        }
+    });
+
+    setMenuItems(menuItems.filter(item => item.id !== id));
+};
 
 
     const totalRevenue = menuItems.reduce((acc, item) => {
@@ -237,7 +195,7 @@ const Supplier = () => {
 
                             <div className="menu-card" key={item.id}>
 
-                                <img src={item.img} alt={item.name} />
+                                <img src={item.imageUrl} alt={item.name} />
 
                                 {item.discount > 0 && (
                                     <div className="discount-badge">
@@ -256,7 +214,7 @@ const Supplier = () => {
                                     <h3>{item.name}</h3>
 
                                     <div className="status">
-                                        {item.stock ?
+                                        {item.inStock ?
                                             <span className="in-stock">In Stock</span>
                                             :
                                             <span className="out-stock">Out of Stock</span>
@@ -278,7 +236,7 @@ const Supplier = () => {
                                             <label className="stock-switch">
                                                 <input
                                                     type="checkbox"
-                                                    checked={item.stock}
+                                                    checked={item.inStock}
                                                     onChange={() => toggleStock(item.id)}
                                                 />
                                                 <span className="stock-slider"></span>
